@@ -1,0 +1,5 @@
+/.idea/
+/wallet/.mvn/wrapper/maven-wrapper.properties
+/wallet/.gitattributes
+/wallet/mvnw
+/wallet/mvnw.cmd
