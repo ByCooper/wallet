@@ -41,11 +41,17 @@ public class WalletServiceImpl implements WalletService{
 
     @Override
     public int getBalance(UUID uuidWallet) {
+        if(wallet.existsById(uuidWallet)) {
+            throw new RuntimeException("Кошелек не найден");
+        }
         return wallet.findById(uuidWallet).orElseThrow(() -> new RuntimeException("Кошелек не найден")).getBalance();
     }
 
 
     private void getDepositMoney(PayOperationDTO order) {
+        if(wallet.existsById(order.getUuidWallet())) {
+            throw new RuntimeException("Кошелек не найден");
+        }
         Wallet wall = entityManager.find(Wallet.class, order.getUuidWallet());
         if(wall != null){
             wall.setBalance(wall.getBalance() + order.getAmount());
@@ -57,6 +63,9 @@ public class WalletServiceImpl implements WalletService{
 
 
     private void getWithdrawMoney(PayOperationDTO order) {
+        if(wallet.existsById(order.getUuidWallet())) {
+            throw new RuntimeException("Кошелек не найден");
+        }
         Wallet wall = entityManager.find(Wallet.class, order.getUuidWallet());
         if(wall != null){
             if(wall.getBalance() >= order.getAmount()) {
