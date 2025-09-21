@@ -102,7 +102,6 @@ class WalletServiceImplTest {
         //Подготовка ввода данных
         Set<PayOperation> pay = new HashSet<>();
         Wallet wallet = new Wallet(1000, pay);
-        PayOperationDTO payOperationDTO = new PayOperationDTO(wallet.getUuid(), OperationType.WITHDRAW, 3000);
         UUID actual = UUID.randomUUID();
         PayOperationDTO payOperationDTO1 = new PayOperationDTO(actual, OperationType.DEPOSIT, 500);
 

@@ -77,7 +77,6 @@
             <version>5.9.3</version>
             <scope>test</scope>
         </dependency>
-
         <!-- Mockito Core -->
         <dependency>
             <groupId>org.mockito</groupId>
@@ -85,7 +84,6 @@
             <version>5.3.1</version>
             <scope>test</scope>
         </dependency>
-
         <!-- Mockito JUnit 5 Integration -->
         <dependency>
             <groupId>org.mockito</groupId>
@@ -93,12 +91,17 @@
             <version>5.3.1</version>
             <scope>test</scope>
         </dependency>
-
         <!-- Для Mockito с Spring Boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <version>3.1.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>6.2.10</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

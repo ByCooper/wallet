@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # Java приложение
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/hogwarts
+      - SPRING_DATASOURCE_USERNAME=student
+      - SPRING_DATASOURCE_PASSWORD=chocolatefrog
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  # База данных PostgreSQL
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=hogwarts
+      - POSTGRES_USER=student
+      - POSTGRES_PASSWORD=chocolatefrog
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    ports:
+      - "5432:5432"
+
+  # Redis для кэширования
+  redis:
+    image: redis:7-alpine
+    networks:
+      - app-network
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge
