@@ -16,7 +16,7 @@ public class Wallet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private final UUID uuid;
+    private  UUID uuid;
     private int balance;
     @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL)
     private final Set<PayOperation> pay;

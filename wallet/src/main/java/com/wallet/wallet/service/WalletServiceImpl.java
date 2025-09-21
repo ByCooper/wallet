@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class WalletServiceImpl implements WalletService{
+public class WalletServiceImpl implements WalletService {
 
     private final WalletRepository wallet;
     private final PayRepository pay;
@@ -27,11 +27,10 @@ public class WalletServiceImpl implements WalletService{
 
     @Override
     public Wallet getChangeBalance(PayOperationDTO order) {
-        if(order.getOperationType().equals(OperationType.DEPOSIT)){
+        if (order.getOperationType().equals(OperationType.DEPOSIT)) {
             getDepositMoney(order);
             return wallet.findById(order.getUuidWallet()).orElseThrow(() -> new RuntimeException("Кошелек не найден"));
-        }
-        else if(order.getOperationType().equals(OperationType.WITHDRAW)){
+        } else if (order.getOperationType().equals(OperationType.WITHDRAW)) {
             getWithdrawMoney(order);
             return wallet.findById(order.getUuidWallet()).orElseThrow(() -> new RuntimeException("Кошелек не найден"));
         } else {
@@ -41,7 +40,7 @@ public class WalletServiceImpl implements WalletService{
 
     @Override
     public int getBalance(UUID uuidWallet) {
-        if(wallet.existsById(uuidWallet)) {
+        if (wallet.existsById(uuidWallet)) {
             throw new RuntimeException("Кошелек не найден");
         }
         return wallet.findById(uuidWallet).orElseThrow(() -> new RuntimeException("Кошелек не найден")).getBalance();
@@ -49,11 +48,11 @@ public class WalletServiceImpl implements WalletService{
 
 
     private void getDepositMoney(PayOperationDTO order) {
-        if(wallet.existsById(order.getUuidWallet())) {
+        if (wallet.existsById(order.getUuidWallet())) {
             throw new RuntimeException("Кошелек не найден");
         }
         Wallet wall = entityManager.find(Wallet.class, order.getUuidWallet());
-        if(wall != null){
+        if (wall != null) {
             wall.setBalance(wall.getBalance() + order.getAmount());
         } else {
             throw new RuntimeException("Кошелек не найден " + order.getUuidWallet());
@@ -63,16 +62,12 @@ public class WalletServiceImpl implements WalletService{
 
 
     private void getWithdrawMoney(PayOperationDTO order) {
-        if(wallet.existsById(order.getUuidWallet())) {
-            throw new RuntimeException("Кошелек не найден");
-        }
         Wallet wall = entityManager.find(Wallet.class, order.getUuidWallet());
-        if(wall != null){
-            if(wall.getBalance() >= order.getAmount()) {
-                wall.setBalance(wall.getBalance() - order.getAmount());
-            } else {
-                throw new RuntimeException("Недостаточно средств на балансе кошелька " + order.getUuidWallet());
-            }
+        if (wall.getBalance() < order.getAmount()) {
+            throw new RuntimeException("Недостаточно средств на балансе кошелька " + order.getUuidWallet());
+        }
+        if (wall.getBalance() >= order.getAmount()) {
+            wall.setBalance(wall.getBalance() - order.getAmount());
         } else {
             throw new RuntimeException("Кошелек не найден " + order.getUuidWallet());
         }

@@ -84,18 +84,33 @@ class WalletServiceImplTest {
         Wallet wallet = new Wallet(1000, pay);
         PayOperationDTO payOperationDTO = new PayOperationDTO(wallet.getUuid(), OperationType.WITHDRAW, 3000);
         UUID actual = UUID.randomUUID();
+        PayOperationDTO payOperationDTO1 = new PayOperationDTO(actual, OperationType.DEPOSIT, 500);
 
         //Подготовка ожидаемого результата
         when(walletRepository.findById(any())).thenReturn(Optional.of(wallet));
         when(entityManager.find(Wallet.class, wallet.getUuid())).thenReturn(wallet);
-        Exception exception_2 = assertThrows(RuntimeException.class, () -> walletService.getChangeBalance(new PayOperationDTO(actual, OperationType.WITHDRAW, 500)));
+        Exception exception_2 = assertThrows(RuntimeException.class, () -> walletService.getChangeBalance(payOperationDTO1));
         Exception exception_3 = assertThrows(RuntimeException.class, () -> walletService.getChangeBalance(payOperationDTO));
 
         //Запуск теста
-
-        assertEquals("Кошелек не найден " + actual, exception_2.getMessage());
         assertEquals("Недостаточно средств на балансе кошелька " + payOperationDTO.getUuidWallet(), exception_3.getMessage());
         assertThrows(RuntimeException.class, () -> walletService.getChangeBalance(payOperationDTO));
+    }
+
+    @Test
+    void Test_getChangeBalance_Exception_1() {
+        //Подготовка ввода данных
+        Set<PayOperation> pay = new HashSet<>();
+        Wallet wallet = new Wallet(1000, pay);
+        PayOperationDTO payOperationDTO = new PayOperationDTO(wallet.getUuid(), OperationType.WITHDRAW, 3000);
+        UUID actual = UUID.randomUUID();
+        PayOperationDTO payOperationDTO1 = new PayOperationDTO(actual, OperationType.DEPOSIT, 500);
+
+        //Подготовка ожидаемого результата
+        Exception exception_2 = assertThrows(RuntimeException.class, () -> walletService.getChangeBalance(payOperationDTO1));
+
+        //Запуск теста
+        assertEquals("Кошелек не найден " + payOperationDTO1.getUuidWallet(), exception_2.getMessage());
     }
 
     @Test
